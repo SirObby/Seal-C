@@ -1,0 +1,11 @@
+prefix=@CMAKE_INSTALL_PREFIX@
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: libsealc
+Description: An incredibly lightweight C Discord library
+Version: @PROJECT_VERSION@
+URL: https://seals-are-bouncy.tech/
+Libs: -L${libdir} -lsealc
+Cflags: -I${includedir}
