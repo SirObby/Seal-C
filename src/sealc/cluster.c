@@ -13,9 +13,10 @@
  * limitations under the License.
  *
  ************************************************************************************/
+#include <stdio.h>
 
 #include "sealc/cluster.h"
 
-void set_token(char token) {
-
+void set_token(char *token) {
+    printf("%s", token);
 }

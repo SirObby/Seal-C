@@ -17,5 +17,5 @@
 typedef struct _cluster cluster;
 struct _cluster
 {
-    void (*set_token)(char);
+    void (*set_token)(cluster *, char *);
 };
