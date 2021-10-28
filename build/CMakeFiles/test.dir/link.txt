@@ -1,1 +1,0 @@
-/usr/bin/cc    CMakeFiles/test.dir/src/test.c.o  -o test  -Wl,-rpath,/mnt/c/Users/ccamb/Documents/Other-Categories/C/Seal.c/build libsealc.so /usr/lib/x86_64-linux-gnu/libcrypto.so /usr/lib/x86_64-linux-gnu/libssl.so /usr/lib/x86_64-linux-gnu/libz.so 
