@@ -14,8 +14,5 @@
  *
  ************************************************************************************/
 
-typedef struct _cluster cluster;
-struct _cluster
-{
-    void (*set_token)(char);
-};
+#include "sealc/cluster.h"
+#include "sealc/version.h"
