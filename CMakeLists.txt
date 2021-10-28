@@ -91,7 +91,7 @@ foreach (fullmodname ${subdirlist})
     get_filename_component(modname ${fullmodname} NAME)
     set (modsrc "")
 	
-	file(GLOB modsrc "${modules_dir}/sealc/*.cpp" "${modules_dir}/sealc/events/*.cpp" "${modules_dir}/sealc/cluster/*.cpp")
+	file(GLOB modsrc "${modules_dir}/sealc/*.c" "${modules_dir}/sealc/events/*.c" "${modules_dir}/sealc/cluster/*.c")
 	
 	if(BUILD_SHARED_LIBS)
         add_library(${modname} SHARED ${modsrc})
@@ -128,11 +128,11 @@ foreach (fullmodname ${subdirlist})
 	endif()
 endforeach()
 
-target_compile_features(sealc PRIVATE cxx_std_17)
+#target_compile_features(sealc PRIVATE cxx_std_17)
 
 if (SEALC_BUILD_TEST)
 	add_executable(test ${coresrc})
-	target_compile_features(test PRIVATE cxx_std_17)
+#	target_compile_features(test PRIVATE cxx_std_17)
 	target_link_libraries(test PUBLIC ${modname})
 endif()
 
