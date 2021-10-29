@@ -17,6 +17,6 @@
 
 #include "sealc/cluster.h"
 
-void set_token(char *token) {
-    printf("%s", token);
-}
+/*void set_token(char *token) {
+    //printf("%s", token);
+}*/

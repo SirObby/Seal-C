@@ -24,7 +24,8 @@
 int main() {
 
     cluster bot;
-    bot.set_token(&bot, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    bot.token = "EE";
+    //bot.set_token(&bot, "REE");
 
     return 0;
 }
