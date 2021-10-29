@@ -25,7 +25,10 @@ int main() {
 
     cluster bot;
     bot.token = "EE";
+    bot.shard_count = 1;
     //bot.set_token(&bot, "REE");
+
+    bot.cluster_start(&bot);
 
     return 0;
 }

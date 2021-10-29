@@ -18,6 +18,11 @@ typedef struct _cluster cluster;
 struct _cluster
 {
     char *token;
-
-    //void (*set_token)(cluster *, char *);
+    int shard_count;
+    void (*cluster_log)(cluster *, char *);
+    void (*cluster_start)(cluster *);
+    
 };
+
+void cluster_log(cluster *c, char *msg);
+void cluster_start(cluster *c);

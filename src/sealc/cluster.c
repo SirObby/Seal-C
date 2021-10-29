@@ -17,6 +17,18 @@
 
 #include "sealc/cluster.h"
 
-/*void set_token(char *token) {
-    //printf("%s", token);
-}*/
+void cluster_log(cluster *c, char *msg)
+{
+}
+
+void cluster_start(cluster *c)
+{
+    /*if(c->shard_count == 0) {
+        c->shard_count = 1;
+    };*/
+    /*for (size_t i = 0; i < c->shard_count; i++)
+    {
+        c->cluster_log(c, 1, "Starting shard..");
+    }*/
+    
+}
