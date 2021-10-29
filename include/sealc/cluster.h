@@ -19,10 +19,23 @@ struct _cluster
 {
     char *token;
     int shard_count;
-    void (*cluster_log)(cluster *, char *);
-    void (*cluster_start)(cluster *);
+//    void (*cluster_log)(cluster *, char *);
+//    void (*cluster_start)(cluster *);
+    discord_idle_cb on_ready_evnt;
     
 };
 
+typedef struct _discord_user discord_user;
+struct _discord_user {
+    char *username;
+    int discriminator;
+};
+
+/** 
+ * @brief Idle callback
+ */
+typedef void (*discord_idle_cb)(cluster *cluster, discord_user *bot);
+
 void cluster_log(cluster *c, char *msg);
 void cluster_start(cluster *c);
+void set_on_ready(cluster *c, discord_idle_cb callback);

@@ -23,12 +23,19 @@ void cluster_log(cluster *c, char *msg)
 
 void cluster_start(cluster *c)
 {
-    /*if(c->shard_count == 0) {
+    if(c->shard_count == 0) {
         c->shard_count = 1;
-    };*/
-    /*for (size_t i = 0; i < c->shard_count; i++)
+    };
+    for (size_t i = 0; i < c->shard_count; i++)
     {
-        c->cluster_log(c, 1, "Starting shard..");
-    }*/
+        cluster_log(c, "Starting shard..");
+    }
+
+    (*c->on_ready_evnt);
     
+}
+
+void set_on_ready(cluster *c, discord_idle_cb callback) {
+    c->on_ready_evnt = callback;
+    //(*f);
 }

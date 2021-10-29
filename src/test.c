@@ -19,16 +19,23 @@
     This exists here to test for some reason, idk D++ has it, so I do.
 
 */
+#include <stdio.h>
+
 #include <sealc/sealc.h>
+
+void on_ready(cluster *cluster, discord_user *bot) {
+    printf("sus");
+}
 
 int main() {
 
     cluster bot;
     bot.token = "EE";
     bot.shard_count = 1;
-    //bot.set_token(&bot, "REE");
 
-    bot.cluster_start(&bot);
+    set_on_ready(&bot, on_ready);
+
+    cluster_start(&bot);
 
     return 0;
 }
