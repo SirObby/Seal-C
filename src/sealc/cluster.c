@@ -17,6 +17,7 @@
 #include <string.h>
 
 #include "sealc/cluster.h"
+#include "dpp/wsclient.h"
 
 void cluster_log(cluster *c, char *msg)
 {
