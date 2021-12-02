@@ -14,28 +14,37 @@
  *
  ************************************************************************************/
 #include <stdio.h>
+#include <string.h>
 
 #include "sealc/cluster.h"
 
 void cluster_log(cluster *c, char *msg)
 {
+    printf(": %s\n", msg);
 }
 
-void cluster_start(cluster *c)
+void cluster_set_events(cluster *c, int event_count, ...) {
+
+}
+
+void cluster_start(cluster *c, int event_count, ... )
 {
     if(c->shard_count == 0) {
         c->shard_count = 1;
     };
     for (size_t i = 0; i < c->shard_count; i++)
     {
-        cluster_log(c, "Starting shard..");
+        char *s = "Starting shard..";
+        //char snum[5];
+        //itoa(i, snum, 10);    
+
+        //strcat(s, i);
+        cluster_log(c, s);
     }
 
-    (*c->on_ready_evnt);
+    while (1)
+    {
+        //printf("e");
+    }
     
-}
-
-void set_on_ready(cluster *c, discord_idle_cb callback) {
-    c->on_ready_evnt = callback;
-    //(*f);
 }

@@ -130,8 +130,11 @@ endforeach()
 
 #target_compile_features(sealc PRIVATE cxx_std_17)
 
+set_property(TARGET sealc PROPERTY C_STANDARD 11)
+
 if (SEALC_BUILD_TEST)
 	add_executable(test ${coresrc})
+	set_property(TARGET test PROPERTY C_STANDARD 11)
 #	target_compile_features(test PRIVATE cxx_std_17)
 	target_link_libraries(test PUBLIC ${modname})
 endif()

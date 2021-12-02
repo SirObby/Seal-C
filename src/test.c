@@ -23,7 +23,7 @@
 
 #include <sealc/sealc.h>
 
-void on_ready(cluster *cluster, discord_user *bot) {
+void on_ready(cluster *cluster) {
     printf("sus");
 }
 
@@ -33,9 +33,8 @@ int main() {
     bot.token = "EE";
     bot.shard_count = 1;
 
-    set_on_ready(&bot, on_ready);
-
-    cluster_start(&bot);
+    cluster_set_events(&bot, 1, discord_ready);
+    cluster_start(&bot, 1, on_ready);
 
     return 0;
 }
