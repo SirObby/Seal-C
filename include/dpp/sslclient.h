@@ -20,9 +20,7 @@
  ************************************************************************************/
 #pragma once
 #include <dpp/export.h>
-#include <string>
-#include <functional>
-#include <dpp/discord.h>
+#include <string.h>
 #include <dpp/socket.h>
 
 namespace dpp {

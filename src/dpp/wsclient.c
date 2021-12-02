@@ -18,11 +18,11 @@
  * limitations under the License.
  *
  ************************************************************************************/
-#include <string>
-#include <iostream>
-#include <fstream>
+#include <string.h>
+#include <iostream.h>
+#include <fstream.h>
 #include <dpp/wsclient.h>
-#include <dpp/fmt/format.h>
+//#include <dpp/fmt/format.h>
 
 const unsigned char WS_MASKBIT = (1u << 7u);
 const unsigned char WS_FINBIT = (1u << 7u);
@@ -46,6 +46,7 @@ void websocket_client::connect()
 	state = HTTP_HEADERS;
 	/* Send headers synchronously */
 	this->write(
+		
 		fmt::format(
 
 			"GET {} HTTP/1.1\r\n"
