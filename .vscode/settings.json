@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "*.spwn": "spwn",
-        "string": "cpp"
-    }
-}
