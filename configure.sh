@@ -22,9 +22,8 @@ bold_white="${Esc}[1;37m"
 echo "${cyan}| Setting up ${magenta}...${reset}"
 echo "${cyan}| Setting up ${blue}dependencies ${magenta}...${reset}"
 mkdir libs >/dev/null 2>&1
-cd libs
 echo "${cyan}| Checking for updates ${blue}git pull ${magenta}...${reset}"
-git pull
+#git pull
 echo "${cyan}| Generating ${blue}cmake ${magenta}...${reset}"
 mkdir build
 cd build
