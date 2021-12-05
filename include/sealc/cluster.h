@@ -14,6 +14,9 @@
  *
  ************************************************************************************/
 
+#ifndef _SEALC_CLUSTER_H
+#define _SEALC_CLUSTER_H
+
 enum discord_events
 {
     discord_application_command_create,
@@ -90,3 +93,5 @@ struct _cluster
 void cluster_start(cluster *c, int event_count, ... );
 void cluster_log(cluster *c, char *msg);
 void cluster_set_events(cluster *c, int event_count, ...);
+
+#endif

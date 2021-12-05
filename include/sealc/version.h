@@ -14,7 +14,8 @@
  *
  ************************************************************************************/
 
-#pragma once
+#ifndef _SEALC_VERSION_H
+#define _SEALC_VERSION_H
 
 #if !defined(SEALC_VERSION_LONG)
 #define SEALC_VERSION_LONG 0x00090000
@@ -23,4 +24,6 @@
 
 #define SEALC_VERSION_MAJOR ((SEALC_VERSION_LONG & 0x00ff0000) >> 16)
 #define SEALC_VERSION_MINOR ((SEALC_VERSION_LONG & 0x0000ff00) >> 8)
+#endif
+
 #endif
