@@ -17,6 +17,12 @@
 #ifndef _SEALC_CLUSTER_H
 #define _SEALC_CLUSTER_H
 
+#include <cwire/socket.h>
+#include <cwire/tls.h>
+#include <cwire/ws.h>
+#include <uv.h>
+#include <sealc/constants.h>
+
 enum discord_events
 {
     discord_application_command_create,
@@ -83,6 +89,9 @@ enum discord_events
 typedef struct _cluster cluster;
 struct _cluster
 {
+    // memory allocation context
+    cwr_malloc_ctx_t *m_ctx;
+
     char *token;
     int shard_count;
 //    void (*cluster_log)(cluster *, char *);
@@ -90,8 +99,53 @@ struct _cluster
     enum discord_events de[58];
 };
 
+typedef struct _shard shard;
+struct _shard {
+    cluster *cluster;
+    int id;
+
+    // memory allocation context
+    cwr_malloc_ctx_t *m_ctx;
+
+    // event loop
+    uv_loop_t *loop;
+    uv_timer_t heartbeat_timer;
+    int heartbeat_interval;
+    uv_timer_t identify_timeout;
+
+    struct {
+        unsigned int want_ack : 1;
+        /* We're sending heartbeats and sent an IDENTIFY */
+        unsigned int ready : 1;
+        /* We're connected (READY/RESUMED) */
+        unsigned int connected : 1;
+        /* We're in the resume process */
+        unsigned int resuming : 1;
+        /* We're in the reidentify process */
+        unsigned int reidentifying : 1;
+    } status;
+
+    /* Incomplete frame buffer */
+    cwr_buf_t frame_buffer;
+
+    /* Network stack */
+    cwr_sock_t tcp;
+    cwr_tls_t tls;
+    cwr_ws_t ws;
+};
+
 void cluster_start(cluster *c, int event_count, ... );
 void cluster_log(cluster *c, char *msg);
 void cluster_set_events(cluster *c, int event_count, ...);
+
+/**
+ * Starts a new shard
+ * @param cluster The cluster owning the shard
+ * @param id The shard ID
+ * @param loop Event loop to use
+ * @param shard The shard to start
+ * @return non zero on failure
+ */
+int shard_start(cluster *cluster, shard *shard, uv_loop_t *loop, int id);
 
 #endif
