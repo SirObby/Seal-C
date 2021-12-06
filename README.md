@@ -7,7 +7,7 @@ Seal-C is a lightweight library for Discord.
 
 ## Building
 Requirements:
-1. Linux (Linuxmasterrace)
+1. Linux (works on macOS too)
 2. CMake
 3. GCC
 Building:

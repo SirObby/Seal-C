@@ -4,6 +4,7 @@ option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(SEALC_BUILD_TEST "Build the test program" ON)
 
 add_compile_definitions(SEAL_BUILD)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/include/sealc/version.h" version_h)
 
@@ -37,41 +38,10 @@ endif()
 
 include("cmake/colour.cmake")
 
-#if (MINGW OR NOT WIN32)
-#	include("cmake/FindSodium.cmake")
-#	include("cmake/FindOpus.cmake")
-#endif()
-
-aux_source_directory("src" coresrc)
-
-string(ASCII 27 Esc)
-
-set(THREADS_PREFER_PTHREAD_FLAG OFF)
-
+# Dependencies
+set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-if(MINGW OR NOT WIN32)
-	find_package(ZLIB REQUIRED)
-endif(MINGW OR NOT WIN32)
-
-if(APPLE)
-	set(OPENSSL_ROOT_DIR "/usr/local/opt/openssl")
-
-	find_package(OpenSSL REQUIRED)
-else()
-	if(MINGW OR NOT WIN32)
-		find_package(OpenSSL REQUIRED)
-	endif()
-endif()
-
-include_directories(${OPENSSL_INCLUDE_DIR} ${ZLIB_INCLUDE_DIRS})
-
-include_directories("include")
-
-find_package(Git QUIET)
-
-if(NOT GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
-	message(FATAL_ERROR "You are using a git version of SEALC but do not have git installed. Install git (not 'gh') and try again.")
-endif()
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/deps/cwire)
 
 if(EXISTS "${PROJECT_SOURCE_DIR}/.git")
 	message("-- Building ${Green}git${ColourReset} version. ${Green}Be aware git versions may be unstable!${ColourReset}")
@@ -79,64 +49,49 @@ else()
 	message("-- Building ${Green}stable${ColourReset} version ${Green}${SEALC_VERSION}${ColourReset}")
 endif()
 
-if(UNIX OR MSYS)
-	find_program(LDCONFIG_EXECUTABLE "ldconfig")
-endif()
+add_library(sealc
+	${CMAKE_CURRENT_SOURCE_DIR}/src/sealc/cluster.c
+	${CMAKE_CURRENT_SOURCE_DIR}/src/sealc/sealc.c
+)
 
-set(modules_dir "src")
+set_target_properties(sealc PROPERTIES
+	C_STANDARD 11
+	C_STANDARD_REQUIRED ON
+)
 
-file(GLOB subdirlist ${modules_dir}/sealc)
+target_include_directories(sealc PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/include 
+    ${UV_INCLUDE_DIR}
+    ${ZLIB_INCLUDE_DIRS}
+)
 
-foreach (fullmodname ${subdirlist})
-    get_filename_component(modname ${fullmodname} NAME)
-    set (modsrc "")
-	
-	file(GLOB modsrc "${modules_dir}/sealc/*.c" "${modules_dir}/sealc/events/*.c" "${modules_dir}/sealc/cluster/*.c")
-	
-	if(BUILD_SHARED_LIBS)
-        add_library(${modname} SHARED ${modsrc})
-	else()
-		add_library(${modname} STATIC ${modsrc})
-	endif()
+target_link_libraries(sealc PUBLIC
+    # Event Loop
+    ${UV_LIBRARIES} 
+    cwire
+    # Math
+    m
+    ${ZLIB_LIBRARIES}
+)
 
-	if (WIN32 AND NOT MINGW)
-		if (NOT WINDOWS_32_BIT)
-			target_link_libraries(${modname} PUBLIC "${PROJECT_SOURCE_DIR}/win32/lib/libssl.lib"
-				"${PROJECT_SOURCE_DIR}/win32/lib/libcrypto.lib"
-				"${PROJECT_SOURCE_DIR}/win32/lib/libsodium.lib"
-				"${PROJECT_SOURCE_DIR}/win32/lib/opus.lib"
-				"${PROJECT_SOURCE_DIR}/win32/lib/zlib.lib")
-		else()
-			target_link_libraries(${modname} PUBLIC "${PROJECT_SOURCE_DIR}/win32/32/lib/libssl.lib"
-				"${PROJECT_SOURCE_DIR}/win32/32/lib/libcrypto.lib"
-				"${PROJECT_SOURCE_DIR}/win32/32/lib/libsodium.lib"
-				"${PROJECT_SOURCE_DIR}/win32/32/lib/opus.lib"
-				"${PROJECT_SOURCE_DIR}/win32/32/lib/zlib.lib")
-		endif()
-
-	else()
-		target_link_libraries(${modname} PUBLIC ${OPENSSL_CRYPTO_LIBRARY} ${OPENSSL_SSL_LIBRARY} ${ZLIB_LIBRARIES})
-		if (MINGW)
-			target_link_libraries(${modname} PUBLIC wsock32 ws2_32 crypt32)
-		endif ()
-	endif()
-
-	if (HAVE_VOICE)
-		target_link_libraries(${modname} PUBLIC ${sodium_LIBRARY_RELEASE} ${OPUS_LIBRARIES})
-		
-		include_directories(${OPUS_INCLUDE_DIRS} ${sodium_INCLUDE_DIR})
-	endif()
-endforeach()
-
-#target_compile_features(sealc PRIVATE cxx_std_17)
-
-set_property(TARGET sealc PROPERTY C_STANDARD 11)
+target_compile_options(sealc PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall>
+)
 
 if (SEALC_BUILD_TEST)
-	add_executable(test ${coresrc})
-	set_property(TARGET test PROPERTY C_STANDARD 11)
-#	target_compile_features(test PRIVATE cxx_std_17)
-	target_link_libraries(test PUBLIC ${modname})
+	add_executable(test 
+		${CMAKE_CURRENT_SOURCE_DIR}/src/test.c
+	)
+	set_target_properties(test PROPERTIES
+        C_STANDARD 11
+        C_STANDARD_REQUIRED ON
+    )
+	target_link_libraries(test PUBLIC sealc)
+endif()
+
+if(UNIX OR MSYS)
+	find_program(LDCONFIG_EXECUTABLE "ldconfig")
 endif()
 
 if(NOT WIN32)

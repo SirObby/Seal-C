@@ -28,13 +28,20 @@ void on_ready(cluster *cluster) {
 }
 
 int main() {
-
+    cwr_malloc_ctx_t m_ctx;
+    cwr_malloc_ctx_new(&m_ctx);
     cluster bot;
+    bot.m_ctx = &m_ctx;
     bot.token = "EE";
     bot.shard_count = 1;
 
-    cluster_set_events(&bot, 1, discord_ready);
-    cluster_start(&bot, 1, on_ready);
+    // cluster_set_events(&bot, 1, discord_ready);
+    // cluster_start(&bot, 1, on_ready);
+
+    shard shard1;
+    shard_start(&bot, &shard1, uv_default_loop(), 1);
+
+    uv_run(uv_default_loop(), UV_RUN_DEFAULT);
 
     return 0;
 }

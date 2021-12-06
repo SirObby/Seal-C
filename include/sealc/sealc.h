@@ -14,5 +14,10 @@
  *
  ************************************************************************************/
 
+#ifndef _SEALC_SEALC_H
+#define _SEALC_SEALC_H
+
 #include "cluster.h"
 #include "version.h"
+
+#endif
