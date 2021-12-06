@@ -1,4 +1,4 @@
-# WARNING! THIS DOES NOT BUILD OR RUN AT ALL!
+Note, this library is unfinished.
 
 # Seal-C
 Seal-C is a lightweight library for Discord.
