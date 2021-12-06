@@ -4,6 +4,7 @@ option(BUILD_SHARED_LIBS "Build shared libraries" ON)
 option(SEALC_BUILD_TEST "Build the test program" ON)
 
 add_compile_definitions(SEAL_BUILD)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 file(READ "${CMAKE_CURRENT_SOURCE_DIR}/include/sealc/version.h" version_h)
 
